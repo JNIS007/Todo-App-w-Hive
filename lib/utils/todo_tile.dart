@@ -9,6 +9,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 class TodoTile extends StatelessWidget {
   final String taskName;
   final bool taskCompleted;
+  final String priority;
   Function(bool?)? onChanged;
   Function(BuildContext)? deleteFunction;
    TodoTile({
@@ -16,7 +17,8 @@ class TodoTile extends StatelessWidget {
   required this.taskName,
     required this.taskCompleted,
     required this.onChanged,
-     required this.deleteFunction
+     required this.deleteFunction,
+     required this.priority,
   });
 
   @override
@@ -31,12 +33,16 @@ class TodoTile extends StatelessWidget {
                 borderRadius: BorderRadius.circular(12),
                   onPressed: deleteFunction,
                 icon: Icons.delete,
-                backgroundColor: Colors.red,
+                backgroundColor: Colors.red.shade300,
               )
             ]
         ),
         child: Container(
           decoration: BoxDecoration(
+            border: Border.all(
+              color: _getPriorityColor(priority).withOpacity(0.3),
+              width: 2,
+            ),
               color: Colors.grey[200],
             borderRadius: BorderRadius.circular(12)
           ),
@@ -56,7 +62,7 @@ class TodoTile extends StatelessWidget {
               Checkbox(
                   value: taskCompleted,
                   onChanged: onChanged,
-                activeColor: Colors.black,
+                activeColor: _getPriorityColor(priority),
                 checkColor: Colors.white,
               )
             ],
@@ -66,3 +72,19 @@ class TodoTile extends StatelessWidget {
     );
   }
 }
+
+
+
+Color _getPriorityColor(String priority) {
+  switch (priority.toLowerCase()) {
+    case 'high':
+      return Colors.red;
+    case 'medium':
+      return Colors.orange;
+    case 'low':
+      return Colors.green;
+    default:
+      return Colors.grey;
+  }
+}
+

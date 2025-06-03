@@ -31,5 +31,18 @@ class ToDoDataBase {
   }
 
 
+  List getTasksByPriority(String priority) {
+    return toDoList.where((task) => task[2] == priority).toList();
+  }
+
+  // Sort tasks by priority (High -> Medium -> Low)
+  void sortByPriority() {
+    toDoList.sort((a, b) {
+      Map<String, int> priorityOrder = {"High": 0, "Medium": 1, "Low": 2};
+      return priorityOrder[a[2]]!.compareTo(priorityOrder[b[2]]!);
+    });
+  }
+
+
 
 }

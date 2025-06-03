@@ -30,6 +30,7 @@ class _HomepageState extends State<Homepage> {
   }
 
   final _controller = TextEditingController();
+  String selectedPriority = "Medium";
 
 
 
@@ -46,7 +47,7 @@ class _HomepageState extends State<Homepage> {
 
   void saveNewTask() {
     setState(() {
-      db.toDoList.add([_controller.text, false]);
+      db.toDoList.add([_controller.text, false, selectedPriority]);
       _controller.clear();
     });
     Navigator.of(context).pop();
@@ -55,12 +56,16 @@ class _HomepageState extends State<Homepage> {
 
   //create new task
   void createNewTask() {
+    selectedPriority = "Medium";
     showDialog(context: context,
         builder: (context){
       return DialogBox(
           controller: _controller,
         onSave: saveNewTask,
         onCancel: ()=> Navigator.of(context).pop(),
+        onPriorityChanged: (priority) {
+          selectedPriority = priority;
+        },
       );
         });
   }
@@ -81,6 +86,7 @@ class _HomepageState extends State<Homepage> {
         title: Text('My TODO List', style: TextStyle(color: Colors.black),),
         centerTitle: true,
 
+
       ),
       floatingActionButton: FloatingActionButton(
           onPressed: createNewTask,
@@ -93,6 +99,7 @@ class _HomepageState extends State<Homepage> {
           return TodoTile(
               taskName: db.toDoList[index][0],
               taskCompleted: db.toDoList[index][1],
+            priority: db.toDoList[index].length > 2 ? db.toDoList[index][2] : "Medium",
               onChanged: (value) => checkBoxChanged(value,index),
             deleteFunction: (context) => deleteTask(index),
           );
